@@ -31,5 +31,9 @@ public class MainThread extends Thread{
         Canvas canvas;
         Log.d(TAG, "Starting game loop");
         canvas = null;
+
+        this.gamePanel.update();
+        this.gamePanel.render(canvas);
+
     }
 }

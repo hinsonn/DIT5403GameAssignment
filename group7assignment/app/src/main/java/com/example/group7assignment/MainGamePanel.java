@@ -55,4 +55,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         Log.d(TAG, "Thread was shut down cleanly");
     }
+
+    public void render(Canvas canvas) {
+    }
+
+    public void update() {
+    }
 }
