@@ -1,11 +1,17 @@
 package com.example.group7assignment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
+
+import static android.graphics.Paint.Style.STROKE;
 
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -14,11 +20,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     private MainThread thread;
     Canvas canvas;
+    Grid grid;
 
     public MainGamePanel(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
+
+        //grid = new Grid(getHeight(),getWidth());
+
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
 
@@ -56,7 +66,50 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         Log.d(TAG, "Thread was shut down cleanly");
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            // delegating event handling to the Grid
+            if(grid.handleActionDown((int)event.getX(), (int)event.getY()))
+                Toast.makeText(((Activity)getContext()), "the ball rolled into hole 3", Toast.LENGTH_SHORT).show();
+
+//            if(event.getY() > getHeight() - 50){
+//                thread.setRunning(false);
+//                ((Activity)getContext()).finish();
+//            }
+            Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
+        }
+
+        //leave the code for further use
+/*
+        if (event.getAction() == MotionEvent.ACTION_MOVE){
+            if(saucer.isTouched()){
+                saucer.setX((int) event.getX());
+                saucer.setY((int) event.getY());
+            }
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP){
+            if(saucer.isTouched()){
+                saucer.setTouched(false);
+            }
+        }
+*/
+        return true;
+    }
+    
     public void render(Canvas canvas) {
+        //this.canvas = canvas;
+        grid = new Grid(getHeight(),getWidth());
+        grid.draw(canvas);
+
+        Paint testPaint = new Paint();
+        testPaint.setStrokeWidth(15);
+        testPaint.setARGB(255, 255, 255, 255);
+        testPaint.setStyle(Paint.Style.STROKE);
+        for (int gridNum = 0; gridNum < 9; gridNum++)
+            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
+
     }
 
     public void update() {
