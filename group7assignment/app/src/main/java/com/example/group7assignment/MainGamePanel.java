@@ -5,6 +5,10 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -12,24 +16,28 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import static android.graphics.Paint.Style.STROKE;
 
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     //for logcat
     private static final String TAG = MainGamePanel.class.getSimpleName();
-
     private MainThread thread;
     Canvas canvas;
     Ball ball;
     Grid grid;
 
+    //for accelerate the ball
+//    private Sensor mSensorAccelerometer;
+
     public MainGamePanel(Context context) {
         super(context);
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
-
-        ball=new Ball(BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),539,820);
+//        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        ball=new Ball((SensorManager)context.getSystemService(Context.SENSOR_SERVICE), BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),539,820);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -116,5 +124,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void update() {
+        ball.update();
+//        if (mSensorAccelerometer != null) {
+//            mSensorManager.registerListener(this, mSensorAccelerometer,
+//                    SensorManager.SENSOR_DELAY_GAME);
+//        }
     }
+
+    public void stop(){
+    }
+
+
 }

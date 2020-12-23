@@ -1,34 +1,43 @@
 package com.example.group7assignment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.AttributeSet;
-import android.view.View;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.util.Log;
 
-import androidx.annotation.Nullable;
+import java.text.DecimalFormat;
 
-import java.util.Random;
-
-public class Ball {
+public class Ball implements SensorEventListener {
     private Bitmap bitmap;
     private float xVel = 0;
     private float yVel = 0;
+    private float xAccel ;
+    private float yAccel ;
     private float xMax;
     private float yMax;
     private float x;
     private float y;
     private boolean inHole;
+    private SensorManager sensorManager;
+    private Sensor mSensorAccelerometer;
 
-
-    public Ball(Bitmap bitmap, int x, int y) {
+    public Ball(SensorManager sensorManager, Bitmap bitmap, int x, int y) {
         this.bitmap = bitmap;
         this.x = x;
         this.y = y;
+        this.sensorManager = sensorManager;
 
     }
 
-    public void update(float xAccel, float yAccel){
+    public void update(){
+        mSensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                if (mSensorAccelerometer != null) {
+                    sensorManager.registerListener(this, mSensorAccelerometer,
+                    SensorManager.SENSOR_DELAY_GAME);
+        }
         float frameTime = 1f;
         if(!inHole) {
             //update by xAccel and yAccel Sensor control
@@ -82,4 +91,29 @@ public class Ball {
     public float getyMax() { return this.yMax;};
     public void setXMax(int xMax) { this.xMax = xMax;};
     public void setYMax(int yMax) { this.yMax = yMax;};
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        // The sensor type (as defined in the Sensor class).
+        int sensorType = sensorEvent.sensor.getType();
+        // element in the values array.
+        float currentValue = sensorEvent.values[0];
+        switch (sensorType) {
+            case Sensor.TYPE_ACCELEROMETER:
+                xAccel = sensorEvent.values[0];
+                yAccel = -sensorEvent.values[1];
+                DecimalFormat precision = new DecimalFormat("0.00");
+                Log.d("Sensor Test","xAccel = " + precision.format(sensorEvent.values[0])
+                        + " yAccel = " + precision.format(sensorEvent.values[1])
+                        + " zAccel = " + precision.format(sensorEvent.values[2]));
+            default:
+//                Log.d("SENSOR:", "not light or proximity");
+                break;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 }

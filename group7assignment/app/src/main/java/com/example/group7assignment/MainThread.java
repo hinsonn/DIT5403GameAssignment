@@ -77,6 +77,7 @@ public class MainThread extends Thread{
                 e.printStackTrace();
             } finally {
                 if(canvas!=null){
+                    this.gamePanel.stop();
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
