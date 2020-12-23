@@ -2,6 +2,7 @@ package com.example.group7assignment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -20,6 +21,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     private MainThread thread;
     Canvas canvas;
+    Ball ball;
     Grid grid;
 
     public MainGamePanel(Context context) {
@@ -27,7 +29,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 
-        //grid = new Grid(getHeight(),getWidth());
+        ball=new Ball(BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),539,820);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -110,6 +112,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         for (int gridNum = 0; gridNum < 9; gridNum++)
             canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
 
+        ball.draw(canvas);
     }
 
     public void update() {
