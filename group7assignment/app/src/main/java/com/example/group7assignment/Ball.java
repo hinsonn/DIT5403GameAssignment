@@ -14,8 +14,8 @@ public class Ball implements SensorEventListener {
     private Bitmap bitmap;
     private float xVel = 0;
     private float yVel = 0;
-    private float xAccel ;
-    private float yAccel ;
+    private float xAccel;
+    private float yAccel;
     private float xMax;
     private float yMax;
     private float x;
@@ -32,30 +32,30 @@ public class Ball implements SensorEventListener {
 
     }
 
-    public void update(){
+    public void update() {
         mSensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                if (mSensorAccelerometer != null) {
-                    sensorManager.registerListener(this, mSensorAccelerometer,
+        if (mSensorAccelerometer != null) {
+            sensorManager.registerListener(this, mSensorAccelerometer,
                     SensorManager.SENSOR_DELAY_GAME);
         }
         float frameTime = 1f;
-        if(!inHole) {
+        if (!inHole) {
             //update by xAccel and yAccel Sensor control
             xVel += (frameTime * xAccel);
             yVel += (frameTime * yAccel);
 
-            x -= xVel*frameTime;
-            y -= yVel*frameTime;
+            x -= xVel * frameTime;
+            y -= yVel * frameTime;
 
-            if(x > xMax){
+            if (x > xMax) {
                 x = xMax;
-            }else if(x < 0){
+            } else if (x < 0) {
                 x = 0;
             }
 
-            if(y > yMax){
+            if (y > yMax) {
                 y = yMax;
-            }else if(y < 0){
+            } else if (y < 0) {
                 y = 0;
             }
         }
@@ -68,29 +68,115 @@ public class Ball implements SensorEventListener {
                 y - (bitmap.getHeight() / 2), null);
     }
 
-    public void goInHole () {
+    public boolean goInHole(int targetX, int targetY) {
+        double radius;
+        double centreX = x;
+        double centreY = y;
+        double distDiffX;   //distance from target to the ball centre by X
+        double distDiffY;   //distance from target to the ball centre by X
 
+        distDiffX = targetX - centreX;
+        distDiffY = targetY - centreY;
+
+        radius = bitmap.getWidth() / 2;
+
+        if (Math.sqrt(distDiffX) + Math.sqrt(distDiffY) <= Math.sqrt(radius)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean isInHole(){
-        return this.inHole;
+    private void setInHole(boolean inHole) {
+        this.inHole = inHole;
+    }
+
+    public boolean isInHole() {
+        return inHole;
     }
 
 
-    public Bitmap getBitmap() { return bitmap; }
-    public void setBitmap(Bitmap bitmap) { this.bitmap = bitmap; };
-    public float getY() { return y;};
-    public float getX(){ return x;};
-    public void setXVel(float xVel) { this.xVel = xVel;};
-    public void setYVel(float yVel) { this.yVel = yVel;};
-    public float getxVel() { return this.xVel;};
-    public float getyVel() { return this.yVel;};
-    public void setX(int x) { this.x = x;};
-    public void setY(int y) { this.y = y;};
-    public float getxMax() { return this.xMax;};
-    public float getyMax() { return this.yMax;};
-    public void setXMax(int xMax) { this.xMax = xMax;};
-    public void setYMax(int yMax) { this.yMax = yMax;};
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    ;
+
+    public float getY() {
+        return y;
+    }
+
+    ;
+
+    public float getX() {
+        return x;
+    }
+
+    ;
+
+    public void setXVel(float xVel) {
+        this.xVel = xVel;
+    }
+
+    ;
+
+    public void setYVel(float yVel) {
+        this.yVel = yVel;
+    }
+
+    ;
+
+    public float getxVel() {
+        return this.xVel;
+    }
+
+    ;
+
+    public float getyVel() {
+        return this.yVel;
+    }
+
+    ;
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    ;
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    ;
+
+    public float getxMax() {
+        return this.xMax;
+    }
+
+    ;
+
+    public float getyMax() {
+        return this.yMax;
+    }
+
+    ;
+
+    public void setXMax(int xMax) {
+        this.xMax = xMax;
+    }
+
+    ;
+
+    public void setYMax(int yMax) {
+        this.yMax = yMax;
+    }
+
+    ;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -103,7 +189,7 @@ public class Ball implements SensorEventListener {
                 xAccel = sensorEvent.values[0];
                 yAccel = -sensorEvent.values[1];
                 DecimalFormat precision = new DecimalFormat("0.00");
-                Log.d("Sensor Test","xAccel = " + precision.format(sensorEvent.values[0])
+                Log.d("Sensor Test", "xAccel = " + precision.format(sensorEvent.values[0])
                         + " yAccel = " + precision.format(sensorEvent.values[1])
                         + " zAccel = " + precision.format(sensorEvent.values[2]));
             default:

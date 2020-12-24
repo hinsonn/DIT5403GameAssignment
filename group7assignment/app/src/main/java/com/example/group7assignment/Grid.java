@@ -1,5 +1,7 @@
 package com.example.group7assignment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -14,15 +16,24 @@ public class Grid {
     private final int topLeftY = 1;
     private final int bottomRightX = 2;
     private final int bottomRightY = 3;
-    private final int[][] gridCoords = new int[9][4];
+    private final int hasBall = 4;  //0 = no ball, 1 = has player's' ball, 2 = has opponent's ball
+    private final int[][] gridCoords = new int[9][5];
+
+    private Bitmap crossBall;
+    private Bitmap dotBall;
+    private final Ball ball;
 
 
-    public Grid(int height, int width) {
+    public Grid(int height, int width, Bitmap crossBall, Bitmap dotBall, Ball ball) {
         this.height = height;
         this.width = width;
+        this.crossBall = crossBall;
+        this.dotBall = dotBall;
+        this.ball = ball;
     }
 
     public void draw(Canvas canvas) {
+        int ballRadius = dotBall.getWidth() / 2;
         calCoord();
 
         Paint gridPaint = new Paint();
@@ -32,6 +43,20 @@ public class Grid {
         for (int gridNum = 0; gridNum < 9; gridNum++) {
             canvas.drawRect(gridCoords[gridNum][topLeftX], gridCoords[gridNum][topLeftY],
                     gridCoords[gridNum][bottomRightX], gridCoords[gridNum][bottomRightY], gridPaint);
+
+
+
+            Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
+            //draw ball in grid if any
+            if (gridCoords[gridNum][hasBall] == 1) {  //this grid has a player's ball
+                canvas.drawBitmap(dotBall, calCentreX(gridNum) - ballRadius,
+                        calCentreY(gridNum) - ballRadius, null);
+
+                Log.d(TAG, "ball drawn in grid " + (gridNum + 1));
+            } else if (gridCoords[gridNum][hasBall] == 2) {    //this grid has a opponent's ball
+                canvas.drawBitmap(crossBall, gridCoords[gridNum][topLeftX] + calWidth(),
+                        gridCoords[gridNum][topLeftY] + calWidth(), null);
+            }
         }
     }
 
@@ -50,11 +75,13 @@ public class Grid {
         int gridWidth = 0;
         int movedLeft = 0;
 
-        gridWidth = calWidth();
+        gridWidth = (int) (calWidth() * 0.99);    //space for the border thickness
 
         //center the whole grid
         gridStartX = (width - gridWidth * 3) / 2;
+        ;
         gridStartY = (height - gridWidth * 3) / 2;
+
 
         //assign the coordinates of all grids
         bottomGridStartY = gridStartY + gridWidth;
@@ -64,6 +91,7 @@ public class Grid {
             gridCoords[gridNum][bottomRightX] = gridStartX + gridWidth * (movedLeft + 1);
             gridCoords[gridNum][topLeftY] = gridStartY;
             gridCoords[gridNum][bottomRightY] = bottomGridStartY;
+            gridCoords[gridNum][hasBall] = gridCoords[gridNum][hasBall];
 
             //go to next line after moved left twice
             if (movedLeft % 2 == 0 && movedLeft > 0) {
@@ -83,30 +111,21 @@ public class Grid {
         return (gridCoords[gridNum][topLeftY] + gridCoords[gridNum][bottomRightY]) / 2;
     }
 
-    public boolean handleActionDown(int touchX, int touchY) {
-        int radius = calWidth() / 2;
-        int distDiffX = touchX - calCentreX(4);    //distance from touch point to center by X
-        int distDiffY = touchY - calCentreY(4);    //distance from touch point to center by Y
+    public void detectBall() {
+        for (int gridNum = 0; gridNum < 9; gridNum++) {
+            if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum))) {
+                gridCoords[gridNum][hasBall] = 1;   //player rolled a ball inside this hole
+                Log.d(TAG, "ball in grid " + gridNum);
+                Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
 
 
-        Log.d(TAG, "Coords: touchx=" + touchX + ",touchy=" + touchY + " centreX=" + calCentreX(3) + " centreY=" + calCentreY(3));
-
-        if (Math.ceil(touchX) == Math.ceil(calCentreX(4))) {
-            if (Math.ceil(touchY) == Math.ceil(calCentreY(4))) {
-                return true;
             }
         }
-        return false;
 
 
-//        Paint testPaint = new Paint();
-//        testPaint.setStrokeWidth(15);
-//        testPaint.setARGB(255, 255, 255, 255);
-//        testPaint.setStyle(Paint.Style.STROKE);
-//        canvas.drawCircle(calCentreX(3), calCentreY(3), radius, testPaint);
+    }
 
-//        The formula is just interpretation of schools geometry for determining if dot is inside circle area or not.
-//        return Math.sqrt(distDiffX)+Math.sqrt(distDiffY)<= radius * radius;
+    public void update() {
 
     }
 }

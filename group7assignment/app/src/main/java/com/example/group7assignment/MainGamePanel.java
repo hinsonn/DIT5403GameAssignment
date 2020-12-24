@@ -9,6 +9,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -37,7 +38,21 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
 //        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        ball=new Ball((SensorManager)context.getSystemService(Context.SENSOR_SERVICE), BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),539,820);
+
+        ball = new Ball((SensorManager) context.getSystemService(Context.SENSOR_SERVICE), BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
+
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(displayMetrics);
+
+        grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
+                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
+
+
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -80,8 +95,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the Grid
-            if(grid.handleActionDown((int)event.getX(), (int)event.getY()))
-                Toast.makeText(((Activity)getContext()), "the ball rolled into hole 3", Toast.LENGTH_SHORT).show();
+            grid.detectBall();
+//            if(grid.handleActionDown((int)event.getX(), (int)event.getY())) {
+//            for (int i=0;i<9;i++){
+//                ball.goInHole(grid.calCentreY(i), grid.calCentreY(i));
+//                Toast.makeText(((Activity)getContext()), "the ball rolled into a hole",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+
+//            }
 
 //            if(event.getY() > getHeight() - 50){
 //                thread.setRunning(false);
@@ -107,10 +129,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 */
         return true;
     }
-    
+
     public void render(Canvas canvas) {
         //this.canvas = canvas;
-        grid = new Grid(getHeight(),getWidth());
+
         grid.draw(canvas);
 
         Paint testPaint = new Paint();
@@ -124,14 +146,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void update() {
-        ball.update();
+//        ball.update();
 //        if (mSensorAccelerometer != null) {
 //            mSensorManager.registerListener(this, mSensorAccelerometer,
 //                    SensorManager.SENSOR_DELAY_GAME);
 //        }
+
+//        grid.update();
     }
 
-    public void stop(){
+    public void stop() {
     }
 
 
