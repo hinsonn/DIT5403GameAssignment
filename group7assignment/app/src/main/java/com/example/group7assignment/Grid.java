@@ -77,6 +77,8 @@ public class Grid {
 
         gridWidth = (int) (calWidth() * 0.99);    //space for the border thickness
 
+        gridWidth=calWidth();
+
         //center the whole grid
         gridStartX = (width - gridWidth * 3) / 2;
         ;

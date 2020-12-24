@@ -77,7 +77,7 @@ public class Ball  {
 
         radius = bitmap.getWidth() / 2;
 
-        if (Math.sqrt(distDiffX) + Math.sqrt(distDiffY) <= Math.sqrt(radius)) {
+        if (Math.pow(distDiffX, 2) + Math.pow(distDiffY, 2) <= Math.pow(radius, 2)) {
             return true;
         } else {
             return false;
