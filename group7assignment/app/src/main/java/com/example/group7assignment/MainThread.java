@@ -9,7 +9,7 @@ public class MainThread extends Thread{
     private static final String TAG = MainThread.class.getSimpleName();
 
     // desired fps
-    private final static int MAX_FPS = 25;
+    private final static int MAX_FPS = 500;
     // maximum number of frames to be skipped
     private final static int MAX_FRAME_SKIPS = 5;
     // the frame period
