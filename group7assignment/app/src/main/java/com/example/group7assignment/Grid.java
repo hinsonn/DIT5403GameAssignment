@@ -46,7 +46,7 @@ public class Grid {
 
 
 
-            Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
+//            Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
             //draw ball in grid if any
             if (gridCoords[gridNum][hasBall] == 1) {  //this grid has a player's ball
                 canvas.drawBitmap(dotBall, calCentreX(gridNum) - ballRadius,
@@ -115,8 +115,8 @@ public class Grid {
         for (int gridNum = 0; gridNum < 9; gridNum++) {
             if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum))) {
                 gridCoords[gridNum][hasBall] = 1;   //player rolled a ball inside this hole
-                Log.d(TAG, "ball in grid " + gridNum);
-                Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
+//                Log.d(TAG, "ball in grid " + gridNum);
+//                Log.d(TAG, "grid " + gridNum + " has " + gridCoords[gridNum][hasBall] + " ball");
 
 
             }

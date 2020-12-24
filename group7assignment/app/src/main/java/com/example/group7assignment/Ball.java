@@ -30,7 +30,7 @@ public class Ball  {
     }
 
     public void update() {
-        Log.d("Update Ball: ", "x = "+x+" y = "+y);
+//        Log.d("Update Ball: ", "x = "+x+" y = "+y);
 
         float frameTime = 0.66f;
         if (!inHole) {
@@ -58,7 +58,7 @@ public class Ball  {
     }
 
     public void draw(Canvas canvas) {
-        Log.d("Draw Ball: ", "x = "+x+" y = "+y);
+//        Log.d("Draw Ball: ", "x = "+x+" y = "+y);
         this.xMax = canvas.getWidth() - bitmap.getWidth() / 2;
         this.yMax = canvas.getHeight() - bitmap.getHeight() / 2;
         canvas.drawBitmap(this.bitmap, x - (this.bitmap.getWidth() / 2),

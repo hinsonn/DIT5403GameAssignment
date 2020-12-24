@@ -38,7 +38,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         super(context);
         // adding the callback (this) to the surface holder to intercept events
         getHolder().addCallback(this);
-//        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if(this.ball == null){
             this.ball = new Ball(context, BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
@@ -50,9 +49,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 .getDefaultDisplay()
                 .getMetrics(displayMetrics);
 
-//        grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
-//                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
-//                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
+        grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
+                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -139,27 +138,22 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawColor(Color.BLACK);
         this.canvas = canvas;
         this.ball.draw(canvas);
-//        grid.draw(canvas);
+        grid.draw(canvas);
 
         Paint testPaint = new Paint();
         testPaint.setStrokeWidth(15);
         testPaint.setARGB(255, 255, 255, 255);
         testPaint.setStyle(Paint.Style.STROKE);
-//        for (int gridNum = 0; gridNum < 9; gridNum++)
-//            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
+        for (int gridNum = 0; gridNum < 9; gridNum++)
+            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
 
 
     }
 
     public void update() {
-        Log.d("sssssss","ssssssssssssss");
-        this.ball.update();
-//        if (mSensorAccelerometer != null) {
-//            mSensorManager.registerListener(this, mSensorAccelerometer,
-//                    SensorManager.SENSOR_DELAY_GAME);
-//        }
 
-//        grid.update();
+        this.ball.update();
+        grid.update();
     }
 
     public void stop() {
