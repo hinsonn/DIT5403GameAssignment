@@ -93,16 +93,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the Grid
-//            grid.detectBall();
+            grid.detectBall();
 //            if(grid.handleActionDown((int)event.getX(), (int)event.getY())) {
 //            for (int i=0;i<9;i++){
 //                ball.goInHole(grid.calCentreY(i), grid.calCentreY(i));
 //                Toast.makeText(((Activity)getContext()), "the ball rolled into a hole",
 //                        Toast.LENGTH_SHORT).show();
 //            }
-
+//
 //            }
-
+//
 //            if(event.getY() > getHeight() - 50){
 //                thread.setRunning(false);
 //                ((Activity)getContext()).finish();
