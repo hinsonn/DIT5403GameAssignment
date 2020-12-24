@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,7 +41,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 //        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if(this.ball == null){
-            ball = new Ball(context, BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
+            this.ball = new Ball(context, BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
         }
 
 
@@ -53,8 +54,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 //                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
 //                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
 
-
-
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
 
@@ -62,20 +61,18 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         setFocusable(true);
     }
 
-    @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         thread.setRunning(true);
         thread.start();
+
     }
 
 
-    @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
 
     }
 
-    @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         Log.d(TAG, "Surface is being destroyed");
         // tell the thread to shut down and wait for it to finish
@@ -132,9 +129,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         return true;
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+
+    }
+
     public void render(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
         this.canvas = canvas;
-        ball.draw(canvas);
+        this.ball.draw(canvas);
 //        grid.draw(canvas);
 
         Paint testPaint = new Paint();
@@ -149,7 +153,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public void update() {
         Log.d("sssssss","ssssssssssssss");
-        ball.update();
+        this.ball.update();
 //        if (mSensorAccelerometer != null) {
 //            mSensorManager.registerListener(this, mSensorAccelerometer,
 //                    SensorManager.SENSOR_DELAY_GAME);

@@ -49,35 +49,38 @@ public class MainThread extends Thread{
 
             try {
                 canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
+                synchronized (surfaceHolder){
+                    //reset these for a normal cycle
                     beginTime = System.currentTimeMillis();
                     framesSkipped = 0;
-                    this.gamePanel.update();
-                    this.gamePanel.render(canvas);
+                    gamePanel.update();
+                    gamePanel.render(canvas);
                     timeDiff = System.currentTimeMillis() - beginTime;
+                    sleepTime += FRAME_PERIOD-timeDiff;
 
-                    sleepTime += FRAME_PERIOD - timeDiff;
-
-                    if (sleepTime > 0) {
-                        Log.d(TAG, "sleep now");
-                        try {
+                    if(sleepTime>0){
+                        Log.d(TAG,"Sleep now");
+                        //we have some time left, so we will make the thread to sleep to match the FPS
+                        try{
                             Thread.sleep(sleepTime);
-                        } catch (InterruptedException e) {
+                            sleepTime = 0;
+                        }
+                        catch(InterruptedException e){
                             e.printStackTrace();
                         }
                     }
-                    while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                        Log.d(TAG, "skip now");
-                        this.gamePanel.update(); //assume update() takes very little time compared to render()
-                        sleepTime += FRAME_PERIOD;
+
+                    while(sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
+                        Log.d(TAG,"Skip now");
+                        this.gamePanel.update();
+                        sleepTime += FRAME_PERIOD; //assume update() method takes very little time compared to render()
                         framesSkipped++;
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if(canvas!=null){
-                    this.gamePanel.stop();
+                if(canvas != null){
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }

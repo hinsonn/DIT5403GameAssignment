@@ -30,7 +30,7 @@ public class Ball  {
     }
 
     public void update() {
-//        Log.d("Update Ball: ", "x = "+x+" y = "+y);
+        Log.d("Update Ball: ", "x = "+x+" y = "+y);
 
         float frameTime = 0.66f;
         if (!inHole) {
