@@ -23,7 +23,7 @@ import java.text.DecimalFormat;
 import static android.graphics.Paint.Style.STROKE;
 
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
-
+    //testing
     //for logcat
     private static final String TAG = MainGamePanel.class.getSimpleName();
     private MainThread thread;
