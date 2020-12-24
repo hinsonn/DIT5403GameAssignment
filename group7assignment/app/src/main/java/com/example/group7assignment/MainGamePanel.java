@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,7 +28,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private static final String TAG = MainGamePanel.class.getSimpleName();
     private MainThread thread;
     Canvas canvas;
-    Ball ball;
+    private Ball ball;
     Grid grid;
 
     //for accelerate the ball
@@ -39,8 +40,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         getHolder().addCallback(this);
 //        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        ball = new Ball((SensorManager) context.getSystemService(Context.SENSOR_SERVICE), BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
-
+        if(this.ball == null){
+            this.ball = new Ball(context, BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
+        }
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -48,11 +50,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                 .getDefaultDisplay()
                 .getMetrics(displayMetrics);
 
-        grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
-                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
-                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
-
-
+//        grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
+//                BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
+//                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
@@ -61,19 +61,18 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         setFocusable(true);
     }
 
-    @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
         thread.setRunning(true);
         thread.start();
+
     }
 
-    @Override
+
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+
+    }
+
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         Log.d(TAG, "Surface is being destroyed");
         // tell the thread to shut down and wait for it to finish
@@ -95,7 +94,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the Grid
-            grid.detectBall();
+//            grid.detectBall();
 //            if(grid.handleActionDown((int)event.getX(), (int)event.getY())) {
 //            for (int i=0;i<9;i++){
 //                ball.goInHole(grid.calCentreY(i), grid.calCentreY(i));
@@ -109,7 +108,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 //                thread.setRunning(false);
 //                ((Activity)getContext()).finish();
 //            }
-            Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
+//            Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
         }
 
         //leave the code for further use
@@ -130,23 +129,31 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         return true;
     }
 
-    public void render(Canvas canvas) {
-        //this.canvas = canvas;
+    @Override
+    protected void onDraw(Canvas canvas) {
 
-        grid.draw(canvas);
+
+    }
+
+    public void render(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+        this.canvas = canvas;
+        this.ball.draw(canvas);
+//        grid.draw(canvas);
 
         Paint testPaint = new Paint();
         testPaint.setStrokeWidth(15);
         testPaint.setARGB(255, 255, 255, 255);
         testPaint.setStyle(Paint.Style.STROKE);
-        for (int gridNum = 0; gridNum < 9; gridNum++)
-            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
+//        for (int gridNum = 0; gridNum < 9; gridNum++)
+//            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
 
-        ball.draw(canvas);
+
     }
 
     public void update() {
-//        ball.update();
+        Log.d("sssssss","ssssssssssssss");
+        this.ball.update();
 //        if (mSensorAccelerometer != null) {
 //            mSensorManager.registerListener(this, mSensorAccelerometer,
 //                    SensorManager.SENSOR_DELAY_GAME);

@@ -1,9 +1,6 @@
 package com.example.group7assignment;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
