@@ -75,16 +75,16 @@ public class Grid {
             canvas.drawText("L O S T", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
 
         }
-//        else if (isDraw()) {
-//            ball.remove();
-//            ball.setInHole(true);
-//        gameOver=true;
-//            Log.d(TAG, "Game Draw");
-//            gridPaint.setStyle(Paint.Style.FILL);
-//            gridPaint.setTextSize(200);
-//            canvas.drawText("D R A W", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
-//
-//        }
+        else if (isDraw()) {
+            ball.remove();
+            ball.setInHole(true);
+            gameOver=true;
+            Log.d(TAG, "Game Draw");
+            gridPaint.setStyle(Paint.Style.FILL);
+            gridPaint.setTextSize(200);
+            canvas.drawText("D R A W", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
+
+        }
         else {
             Log.d(TAG, "won is false.");
 
@@ -261,11 +261,11 @@ public class Grid {
     public boolean isDraw() {
         for (int row = 0; row < ROWS; ++row) {
             for (int col = 0; col < COLS; ++col) {
-                if (gridContents[row][col] != empty) {
-                    return true;
+                if (gridContents[row][col] == empty) {
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 }
