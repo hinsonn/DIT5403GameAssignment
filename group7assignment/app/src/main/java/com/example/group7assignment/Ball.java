@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 public class Ball  {
     private Bitmap bitmap;
@@ -27,6 +28,10 @@ public class Ball  {
         this.x = x;
         this.y = y;
         ballSensor = new BallSensor(context, null);
+    }
+
+    public Ball(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public void update() {
@@ -57,6 +62,11 @@ public class Ball  {
         }
     }
 
+    public void remove(){
+        x = 10000;
+        y = 10000;
+    }
+
     public void draw(Canvas canvas) {
 //        Log.d("Draw Ball: ", "x = "+x+" y = "+y);
         this.xMax = canvas.getWidth() - bitmap.getWidth() / 2;
@@ -78,14 +88,22 @@ public class Ball  {
         radius = bitmap.getWidth() / 2;
 
         if (Math.pow(distDiffX, 2) + Math.pow(distDiffY, 2) <= Math.pow(radius, 2)) {
-//            setInHole(true);
+            setInHole(true);
             return true;
         } else {
             return false;
         }
     }
 
-    private void setInHole(boolean inHole) {
+    public int getOpponentChoice() {
+        Random rand = new Random();
+        int boundary = rand.nextInt(3);
+        return boundary;
+    }
+
+
+
+    public void setInHole(boolean inHole) {
         this.inHole = inHole;
     }
 

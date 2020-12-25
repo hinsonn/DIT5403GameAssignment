@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
+
 public class Grid {
     //for logcat
     private static final String TAG = MainGamePanel.class.getSimpleName();
@@ -34,7 +35,7 @@ public class Grid {
     private final Ball ball;
 
 
-    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball) {
+    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball ) {
         this.height = height;
         this.width = width;
         this.crossBallImg = crossBallImg;
@@ -168,12 +169,34 @@ public class Grid {
                     hasWon(2,1);
                 } else if (gridNum == 8) {
                     gridContents[2][2] = dotBall;
-                    hasWon(2,2);
+                    hasWon(2, 2);
                 }
-
-//
             }
         }
+    }
+
+    public void opponentBallDetect(){
+        boolean haveEmpty = false;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++)
+            if(gridContents[i][j]==0){
+                haveEmpty = true;
+                break;
+            }
+        }
+        if(haveEmpty){
+            while(this.ball.isInHole()){
+                int row = this.ball.getOpponentChoice();
+                int col = this.ball.getOpponentChoice();
+                if(gridContents[row][col]==0){
+                    gridContents[row][col] = 2;
+                    this.ball.setX(539);
+                    this.ball.setY(820);
+                    this.ball.setInHole(false);
+                }
+            }
+        }
+
     }
 
     public void hasWon(int currentRow, int currentCol) {

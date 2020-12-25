@@ -29,6 +29,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainThread thread;
     Canvas canvas;
     private Ball ball;
+    private Ball oppoBall;
     Grid grid;
 
     //for accelerate the ball
@@ -153,6 +154,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void update() {
 
         this.ball.update();
+        if(this.ball.isInHole()){
+            this.ball.remove();
+            this.grid.opponentBallDetect();
+        }
     }
 
     public void stop() {
