@@ -52,7 +52,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         grid = new Grid(displayMetrics.heightPixels, displayMetrics.widthPixels,
                 BitmapFactory.decodeResource(getResources(), R.drawable.cross_ball_1),
-                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball);
+                BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), ball,
+                BitmapFactory.decodeResource(getResources(), R.drawable.won_screen_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.lost_screen_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.draw_screen_1));
 
         // create the game loop thread
         thread = new MainThread(getHolder(), this);
