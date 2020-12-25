@@ -57,12 +57,31 @@ public class Grid {
         if (won == dotBall) {
             ball.remove();
             ball.setInHole(true);
-            Log.d(TAG, "won is true.");
+            Log.d(TAG, "player won");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
             canvas.drawText("W O N", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
 
-        } else {
+
+        } else if (won == crossBall) {
+            ball.remove();
+            ball.setInHole(true);
+            Log.d(TAG, "player lost");
+            gridPaint.setStyle(Paint.Style.FILL);
+            gridPaint.setTextSize(200);
+            canvas.drawText("L O S T", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
+
+        }
+//        else if (isDraw()) {
+//            ball.remove();
+//            ball.setInHole(true);
+//            Log.d(TAG, "Game Draw");
+//            gridPaint.setStyle(Paint.Style.FILL);
+//            gridPaint.setTextSize(200);
+//            canvas.drawText("D R A W", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
+//
+//        }
+        else {
             Log.d(TAG, "won is false.");
 
             //draw 9x9 grid
@@ -192,10 +211,11 @@ public class Grid {
                 int col = this.ball.getOpponentChoice();
                 if (gridContents[row][col] == empty) {
                     gridContents[row][col] = 2;
-                    //hasWon(row, col, crossBall);
+
                     this.ball.setX(539);
                     this.ball.setY(820);
                     this.ball.setInHole(false);
+                    hasWon(row, col, crossBall);
                 }
             }
         }
@@ -231,5 +251,16 @@ public class Grid {
 
     private void setWon(int won) {
         this.won = won;
+    }
+
+    public boolean isDraw() {
+        for (int row = 0; row < ROWS; ++row) {
+            for (int col = 0; col < COLS; ++col) {
+                if (gridContents[row][col] != empty) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
