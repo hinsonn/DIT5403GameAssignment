@@ -78,8 +78,10 @@ public class Ball  {
         radius = bitmap.getWidth() / 2;
 
         if (Math.pow(distDiffX, 2) + Math.pow(distDiffY, 2) <= Math.pow(radius, 2)) {
+//            setInHole(true);
             return true;
         } else {
+//            setInHole(false);
             return false;
         }
     }
