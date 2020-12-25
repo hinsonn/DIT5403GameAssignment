@@ -81,7 +81,6 @@ public class Ball  {
 //            setInHole(true);
             return true;
         } else {
-//            setInHole(false);
             return false;
         }
     }

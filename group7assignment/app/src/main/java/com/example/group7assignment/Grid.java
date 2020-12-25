@@ -54,11 +54,14 @@ public class Grid {
 
 
         if (won) {
+            Log.d(TAG, "won is true.");
             gridPaint.setStyle(Paint.Style.FILL);
-            gridPaint.setTextSize(20);
+            gridPaint.setTextSize(200);
             canvas.drawText("W O N", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
 
         } else {
+            Log.d(TAG, "won is false.");
+
             //draw 9x9 grid
             gridPaint.setStyle(Paint.Style.STROKE);
             for (gridNum = 0; gridNum < 9; gridNum++) {
@@ -141,31 +144,31 @@ public class Grid {
             if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum))) {
                 if (gridNum == 0) {
                     gridContents[0][0] = dotBall;
-                    hasWon();
+                    hasWon(0,0);
                 } else if (gridNum == 1) {
                     gridContents[0][1] = dotBall;
-                    hasWon();
+                    hasWon(0,1);
                 } else if (gridNum == 2) {
                     gridContents[0][2] = dotBall;
-                    hasWon();
+                    hasWon(0,2);
                 } else if (gridNum == 3) {
                     gridContents[1][0] = dotBall;
-                    hasWon();
+                    hasWon(1,0);
                 } else if (gridNum == 4) {
                     gridContents[1][1] = dotBall;
-                    hasWon();
+                    hasWon(1,1);
                 } else if (gridNum == 5) {
                     gridContents[1][2] = dotBall;
-                    hasWon();
+                    hasWon(1,2);
                 } else if (gridNum == 6) {
                     gridContents[2][0] = dotBall;
-                    hasWon();
+                    hasWon(2,0);
                 } else if (gridNum == 7) {
                     gridContents[2][1] = dotBall;
-                    hasWon();
+                    hasWon(2,1);
                 } else if (gridNum == 8) {
                     gridContents[2][2] = dotBall;
-                    hasWon();
+                    hasWon(2,2);
                 }
 
 //
@@ -173,9 +176,33 @@ public class Grid {
         }
     }
 
-    public void hasWon() {
-        int currentRow = 0;
-        int currentCol = 0;
+    public void hasWon(int currentRow, int currentCol) {
+        int ballType;
+        ballType= dotBall;
+
+        //3 in the row
+        if(gridContents[currentRow][0]==ballType&&gridContents[currentRow][1]==ballType
+                &&gridContents[currentRow][2]==ballType){
+            setWon(true);
+            Log.d(TAG, "Game is finished: 3 in the row.");
+        }
+        //3 in the column
+        else if(gridContents[0][currentCol]==ballType&&gridContents[1][currentCol]==ballType
+                &&gridContents[2][currentCol]==ballType){
+            setWon(true);
+            Log.d(TAG, "Game is finished: 3 in the column.");
+        }
+        //3 in the diagonal
+        else if(currentRow == currentCol && gridContents[0][0]==ballType
+                &&gridContents[1][1]==ballType&&gridContents[2][2]==ballType){
+            setWon(true);
+        }
+        //3 in the opposite diagonal
+        else if(currentRow + currentCol == 2&&gridContents[0][2]==ballType
+                &&gridContents[1][1]==ballType&&gridContents[2][0]==ballType){
+            setWon(true);
+        }
+
 
 
 //        for (int gridNum = 0; gridNum < 9; gridNum = +3) {
@@ -186,11 +213,10 @@ public class Grid {
 //                setWon(true);
 //            }
 //        }
-        setWon(false);
+       // setWon(false);
     }
 
     private void setWon(boolean won) {
-        Log.d(TAG, "Game is finished. Player won.");
         this.won = won;
     }
 }
