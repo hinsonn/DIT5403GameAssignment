@@ -15,7 +15,7 @@ public class Grid {
     private int height;
     private int width;
     private int won;
-    private boolean gameOver;
+    private boolean gameOver = false;
     private int[][] gridCoords = new int[9][4];
     private int[][] gridContents = new int[3][3];
 
@@ -58,7 +58,6 @@ public class Grid {
         if (won == dotBall) {
             ball.remove();
             ball.setInHole(true);
-            gameOver=true;
             Log.d(TAG, "player won");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -68,7 +67,6 @@ public class Grid {
         } else if (won == crossBall) {
             ball.remove();
             ball.setInHole(true);
-            gameOver=true;
             Log.d(TAG, "player lost");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -78,7 +76,6 @@ public class Grid {
         else if (isDraw()) {
             ball.remove();
             ball.setInHole(true);
-            gameOver=true;
             Log.d(TAG, "Game Draw");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -216,11 +213,13 @@ public class Grid {
                     int col = this.ball.getOpponentChoice();
                     if (gridContents[row][col] == empty) {
                         gridContents[row][col] = 2;
-
-                        this.ball.setX(539);
-                        this.ball.setY(820);
-                        this.ball.setInHole(false);
                         hasWon(row, col, crossBall);
+                        if(gameOver == false){
+                            this.ball.setX(539);
+                            this.ball.setY(820);
+                            this.ball.setInHole(false);
+                        }
+                        break;
                     }
                 }
             }
@@ -233,23 +232,27 @@ public class Grid {
         if (gridContents[currentRow][0] == ballType && gridContents[currentRow][1] == ballType
                 && gridContents[currentRow][2] == ballType) {
             setWon(ballType);
+            gameOver=true;
             Log.d(TAG, "Game is finished: 3 in the row.");
         }
         //3 in the column
         else if (gridContents[0][currentCol] == ballType && gridContents[1][currentCol] == ballType
                 && gridContents[2][currentCol] == ballType) {
             setWon(ballType);
+            gameOver=true;
             Log.d(TAG, "Game is finished: 3 in the column.");
         }
         //3 in the diagonal
         else if (currentRow == currentCol && gridContents[0][0] == ballType
                 && gridContents[1][1] == ballType && gridContents[2][2] == ballType) {
             setWon(ballType);
+            gameOver=true;
         }
         //3 in the opposite diagonal
         else if (currentRow + currentCol == 2 && gridContents[0][2] == ballType
                 && gridContents[1][1] == ballType && gridContents[2][0] == ballType) {
             setWon(ballType);
+            gameOver=true;
         }
 
     }
