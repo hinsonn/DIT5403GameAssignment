@@ -43,7 +43,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             this.ball = new Ball(context, BitmapFactory.decodeResource(getResources(), R.drawable.dot_ball_1), 539, 820);
         }
 
-
+        //find screen height & width
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                 .getDefaultDisplay()
@@ -140,12 +140,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         this.ball.draw(canvas);
         grid.draw(canvas);
 
-        Paint testPaint = new Paint();
-        testPaint.setStrokeWidth(15);
-        testPaint.setARGB(255, 255, 255, 255);
-        testPaint.setStyle(Paint.Style.STROKE);
-        for (int gridNum = 0; gridNum < 9; gridNum++)
-            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
+//        Paint testPaint = new Paint();
+//        testPaint.setStrokeWidth(15);
+//        testPaint.setARGB(255, 255, 255, 255);
+//        testPaint.setStyle(Paint.Style.STROKE);
+//        for (int gridNum = 0; gridNum < 9; gridNum++)
+//            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
 
 
     }
@@ -153,7 +153,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void update() {
 
         this.ball.update();
-        grid.update();
     }
 
     public void stop() {
