@@ -1,17 +1,12 @@
 package com.example.group7assignment;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 
 public class Grid {
-    //for logcat
-    private static final String TAG = MainGamePanel.class.getSimpleName();
-
     private int height;
     private int width;
     private int won;
@@ -30,15 +25,21 @@ public class Grid {
 
     public final int ROWS = 3, COLS = 3;
 
-
+    private Bitmap wonScreen;
+    private Bitmap lostScreen;
+    private Bitmap drawScreen;
     private Bitmap crossBallImg;
     private Bitmap dotBallImg;
     private Ball ball;
 
 
-    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball) {
+    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball,
+                Bitmap wonScreen, Bitmap lostScreen, Bitmap drawScreen) {
         this.height = height;
         this.width = width;
+        this.wonScreen = wonScreen;
+        this.lostScreen = lostScreen;
+        this.drawScreen = drawScreen;
         this.crossBallImg = crossBallImg;
         this.dotBallImg = dotBallImg;
         this.ball = ball;
@@ -52,39 +53,25 @@ public class Grid {
         Paint gridPaint = new Paint();
         gridPaint.setStrokeWidth(15);
         gridPaint.setColor(Color.WHITE);
-//        gridPaint.setARGB(255, 255, 255, 255);
-
 
         if (won == dotBall) {
             ball.remove();
             ball.setInHole(true);
-            Log.d(TAG, "player won");
-            gridPaint.setStyle(Paint.Style.FILL);
-            gridPaint.setTextSize(200);
-            canvas.drawText("W O N", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
-
-
+            canvas.drawBitmap(wonScreen, calCentreX(4)-wonScreen.getWidth()/2,
+                    calCentreY(4)-wonScreen.getHeight(), null);
         } else if (won == crossBall) {
             ball.remove();
             ball.setInHole(true);
-            Log.d(TAG, "player lost");
-            gridPaint.setStyle(Paint.Style.FILL);
-            gridPaint.setTextSize(200);
-            canvas.drawText("L O S T", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
-
+            canvas.drawBitmap(lostScreen, calCentreX(4)-lostScreen.getWidth()/2,
+                    calCentreY(4)-lostScreen.getHeight(), null);
         }
         else if (isDraw()) {
             ball.remove();
             ball.setInHole(true);
-            Log.d(TAG, "Game Draw");
-            gridPaint.setStyle(Paint.Style.FILL);
-            gridPaint.setTextSize(200);
-            canvas.drawText("D R A W", gridCoords[4][topLeftX], gridCoords[4][topLeftY], gridPaint);
-
+            canvas.drawBitmap(drawScreen, calCentreX(4)-drawScreen.getWidth()/2,
+                    calCentreY(4)-drawScreen.getHeight(), null);
         }
         else {
-            Log.d(TAG, "won is false.");
-
             //draw 9x9 grid
             gridPaint.setStyle(Paint.Style.STROKE);
             for (gridNum = 0; gridNum < 9; gridNum++) {
@@ -126,8 +113,6 @@ public class Grid {
         int movedLeft = 0;
 
         gridWidth = (int) (calWidth() * 0.99);    //space for the border thickness
-
-        gridWidth = calWidth();
 
         //center the whole grid
         gridStartX = (width - gridWidth * 3) / 2;
@@ -227,20 +212,17 @@ public class Grid {
     }
 
     public void hasWon(int currentRow, int currentCol, int ballType) {
-
         //3 in the row
         if (gridContents[currentRow][0] == ballType && gridContents[currentRow][1] == ballType
                 && gridContents[currentRow][2] == ballType) {
             setWon(ballType);
             gameOver=true;
-            Log.d(TAG, "Game is finished: 3 in the row.");
         }
         //3 in the column
         else if (gridContents[0][currentCol] == ballType && gridContents[1][currentCol] == ballType
                 && gridContents[2][currentCol] == ballType) {
             setWon(ballType);
             gameOver=true;
-            Log.d(TAG, "Game is finished: 3 in the column.");
         }
         //3 in the diagonal
         else if (currentRow == currentCol && gridContents[0][0] == ballType
@@ -254,7 +236,6 @@ public class Grid {
             setWon(ballType);
             gameOver=true;
         }
-
     }
 
     private void setWon(int won) {

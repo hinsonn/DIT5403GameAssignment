@@ -5,35 +5,19 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Toast;
-
-import java.text.DecimalFormat;
-
-import static android.graphics.Paint.Style.STROKE;
 
 public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    //testing
     //for logcat
     private static final String TAG = MainGamePanel.class.getSimpleName();
     private MainThread thread;
     Canvas canvas;
     private Ball ball;
-    private Ball oppoBall;
     Grid grid;
-
-    //for accelerate the ball
-//    private Sensor mSensorAccelerometer;
 
     public MainGamePanel(Context context) {
         super(context);
@@ -67,13 +51,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         thread.setRunning(true);
         thread.start();
-
     }
 
 
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-
     }
 
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
@@ -98,44 +79,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // delegating event handling to the Grid
             grid.detectBall();
-//            if(grid.handleActionDown((int)event.getX(), (int)event.getY())) {
-//            for (int i=0;i<9;i++){
-//                ball.goInHole(grid.calCentreY(i), grid.calCentreY(i));
-//                Toast.makeText(((Activity)getContext()), "the ball rolled into a hole",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//
-//            }
-//
-//            if(event.getY() > getHeight() - 50){
-//                thread.setRunning(false);
-//                ((Activity)getContext()).finish();
-//            }
-//            Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
         }
-
-        //leave the code for further use
-/*
-        if (event.getAction() == MotionEvent.ACTION_MOVE){
-            if(saucer.isTouched()){
-                saucer.setX((int) event.getX());
-                saucer.setY((int) event.getY());
-            }
-        }
-
-        if (event.getAction() == MotionEvent.ACTION_UP){
-            if(saucer.isTouched()){
-                saucer.setTouched(false);
-            }
-        }
-*/
         return true;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-
     }
 
     public void render(Canvas canvas) {
@@ -143,28 +92,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         this.canvas = canvas;
         this.ball.draw(canvas);
         grid.draw(canvas);
-
-//        Paint testPaint = new Paint();
-//        testPaint.setStrokeWidth(15);
-//        testPaint.setARGB(255, 255, 255, 255);
-//        testPaint.setStyle(Paint.Style.STROKE);
-//        for (int gridNum = 0; gridNum < 9; gridNum++)
-//            canvas.drawCircle(grid.calCentreX(gridNum), grid.calCentreY(gridNum), 1, testPaint);
-
-
     }
 
     public void update() {
-
         this.ball.update();
         if(this.ball.isInHole()){
             this.ball.remove();
             this.grid.opponentBallDetect();
         }
     }
-
-    public void stop() {
-    }
-
-
 }

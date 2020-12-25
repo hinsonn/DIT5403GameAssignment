@@ -59,7 +59,7 @@ public class MainThread extends Thread{
                     sleepTime += FRAME_PERIOD-timeDiff;
 
                     if(sleepTime>0){
-//                        Log.d(TAG,"Sleep now");
+                        Log.d(TAG,"Sleep now");
                         //we have some time left, so we will make the thread to sleep to match the FPS
                         try{
                             Thread.sleep(sleepTime);
@@ -71,7 +71,7 @@ public class MainThread extends Thread{
                     }
 
                     while(sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-//                        Log.d(TAG,"Skip now");
+                        Log.d(TAG,"Skip now");
                         this.gamePanel.update();
                         sleepTime += FRAME_PERIOD; //assume update() method takes very little time compared to render()
                         framesSkipped++;

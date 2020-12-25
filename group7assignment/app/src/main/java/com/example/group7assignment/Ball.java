@@ -3,13 +3,6 @@ package com.example.group7assignment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.util.Log;
-
-import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Ball  {
@@ -35,8 +28,6 @@ public class Ball  {
     }
 
     public void update() {
-//        Log.d("Update Ball: ", "x = "+x+" y = "+y);
-
         float frameTime = 0.66f;
         if (!inHole) {
             //update by xAccel and yAccel Sensor control
@@ -68,7 +59,6 @@ public class Ball  {
     }
 
     public void draw(Canvas canvas) {
-//        Log.d("Draw Ball: ", "x = "+x+" y = "+y);
         this.xMax = canvas.getWidth() - bitmap.getWidth() / 2;
         this.yMax = canvas.getHeight() - bitmap.getHeight() / 2;
         canvas.drawBitmap(this.bitmap, x - (this.bitmap.getWidth() / 2),
@@ -101,8 +91,6 @@ public class Ball  {
         return boundary;
     }
 
-
-
     public void setInHole(boolean inHole) {
         this.inHole = inHole;
     }
@@ -111,87 +99,11 @@ public class Ball  {
         return inHole;
     }
 
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
-
-    ;
-
-    public float getY() {
-        return y;
-    }
-
-    ;
-
-    public float getX() {
-        return x;
-    }
-
-    ;
-
-    public void setXVel(float xVel) {
-        this.xVel = xVel;
-    }
-
-    ;
-
-    public void setYVel(float yVel) {
-        this.yVel = yVel;
-    }
-
-    ;
-
-    public float getxVel() {
-        return this.xVel;
-    }
-
-    ;
-
-    public float getyVel() {
-        return this.yVel;
-    }
-
-    ;
-
     public void setX(int x) {
         this.x = x;
     }
 
-    ;
-
     public void setY(int y) {
         this.y = y;
     }
-
-    ;
-
-    public float getxMax() {
-        return this.xMax;
-    }
-
-    ;
-
-    public float getyMax() {
-        return this.yMax;
-    }
-
-    ;
-
-    public void setXMax(int xMax) {
-        this.xMax = xMax;
-    }
-
-    ;
-
-    public void setYMax(int yMax) {
-        this.yMax = yMax;
-    }
-
-    ;
-
 }
