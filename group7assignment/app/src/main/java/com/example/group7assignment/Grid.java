@@ -14,7 +14,7 @@ public class Grid {
 
     private int height;
     private int width;
-    private boolean won;
+    private int won;
     private int[][] gridCoords = new int[9][4];
     private int[][] gridContents = new int[3][3];
 
@@ -35,7 +35,7 @@ public class Grid {
     private final Ball ball;
 
 
-    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball ) {
+    public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball) {
         this.height = height;
         this.width = width;
         this.crossBallImg = crossBallImg;
@@ -54,7 +54,9 @@ public class Grid {
 //        gridPaint.setARGB(255, 255, 255, 255);
 
 
-        if (won) {
+        if (won == dotBall) {
+            ball.remove();
+            ball.setInHole(true);
             Log.d(TAG, "won is true.");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -145,51 +147,52 @@ public class Grid {
             if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum))) {
                 if (gridNum == 0) {
                     gridContents[0][0] = dotBall;
-                    hasWon(0,0);
+                    hasWon(0, 0, dotBall);
                 } else if (gridNum == 1) {
                     gridContents[0][1] = dotBall;
-                    hasWon(0,1);
+                    hasWon(0, 1, dotBall);
                 } else if (gridNum == 2) {
                     gridContents[0][2] = dotBall;
-                    hasWon(0,2);
+                    hasWon(0, 2, dotBall);
                 } else if (gridNum == 3) {
                     gridContents[1][0] = dotBall;
-                    hasWon(1,0);
+                    hasWon(1, 0, dotBall);
                 } else if (gridNum == 4) {
                     gridContents[1][1] = dotBall;
-                    hasWon(1,1);
+                    hasWon(1, 1, dotBall);
                 } else if (gridNum == 5) {
                     gridContents[1][2] = dotBall;
-                    hasWon(1,2);
+                    hasWon(1, 2, dotBall);
                 } else if (gridNum == 6) {
                     gridContents[2][0] = dotBall;
-                    hasWon(2,0);
+                    hasWon(2, 0, dotBall);
                 } else if (gridNum == 7) {
                     gridContents[2][1] = dotBall;
-                    hasWon(2,1);
+                    hasWon(2, 1, dotBall);
                 } else if (gridNum == 8) {
                     gridContents[2][2] = dotBall;
-                    hasWon(2, 2);
+                    hasWon(2, 2, dotBall);
                 }
             }
         }
     }
 
-    public void opponentBallDetect(){
+    public void opponentBallDetect() {
         boolean haveEmpty = false;
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 3; j++)
-            if(gridContents[i][j]==0){
-                haveEmpty = true;
-                break;
-            }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++)
+                if (gridContents[i][j] == empty) {
+                    haveEmpty = true;
+                    break;
+                }
         }
-        if(haveEmpty){
-            while(this.ball.isInHole()){
+        if (haveEmpty) {
+            while (this.ball.isInHole()) {
                 int row = this.ball.getOpponentChoice();
                 int col = this.ball.getOpponentChoice();
-                if(gridContents[row][col]==0){
+                if (gridContents[row][col] == empty) {
                     gridContents[row][col] = 2;
+                    //hasWon(row, col, crossBall);
                     this.ball.setX(539);
                     this.ball.setY(820);
                     this.ball.setInHole(false);
@@ -199,47 +202,34 @@ public class Grid {
 
     }
 
-    public void hasWon(int currentRow, int currentCol) {
-        int ballType;
-        ballType= dotBall;
+    public void hasWon(int currentRow, int currentCol, int ballType) {
 
         //3 in the row
-        if(gridContents[currentRow][0]==ballType&&gridContents[currentRow][1]==ballType
-                &&gridContents[currentRow][2]==ballType){
-            setWon(true);
+        if (gridContents[currentRow][0] == ballType && gridContents[currentRow][1] == ballType
+                && gridContents[currentRow][2] == ballType) {
+            setWon(ballType);
             Log.d(TAG, "Game is finished: 3 in the row.");
         }
         //3 in the column
-        else if(gridContents[0][currentCol]==ballType&&gridContents[1][currentCol]==ballType
-                &&gridContents[2][currentCol]==ballType){
-            setWon(true);
+        else if (gridContents[0][currentCol] == ballType && gridContents[1][currentCol] == ballType
+                && gridContents[2][currentCol] == ballType) {
+            setWon(ballType);
             Log.d(TAG, "Game is finished: 3 in the column.");
         }
         //3 in the diagonal
-        else if(currentRow == currentCol && gridContents[0][0]==ballType
-                &&gridContents[1][1]==ballType&&gridContents[2][2]==ballType){
-            setWon(true);
+        else if (currentRow == currentCol && gridContents[0][0] == ballType
+                && gridContents[1][1] == ballType && gridContents[2][2] == ballType) {
+            setWon(ballType);
         }
         //3 in the opposite diagonal
-        else if(currentRow + currentCol == 2&&gridContents[0][2]==ballType
-                &&gridContents[1][1]==ballType&&gridContents[2][0]==ballType){
-            setWon(true);
+        else if (currentRow + currentCol == 2 && gridContents[0][2] == ballType
+                && gridContents[1][1] == ballType && gridContents[2][0] == ballType) {
+            setWon(ballType);
         }
 
-
-
-//        for (int gridNum = 0; gridNum < 9; gridNum = +3) {
-            //3 in the row
-//            if (gridCoords[0][hasBall] == 1 && gridCoords[1][hasBall] == 1 &&
-//                    gridCoords[2][hasBall] == 1) {
-//                Log.d(TAG, "Game is finished. Player won.");
-//                setWon(true);
-//            }
-//        }
-       // setWon(false);
     }
 
-    private void setWon(boolean won) {
+    private void setWon(int won) {
         this.won = won;
     }
 }
