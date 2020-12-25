@@ -15,6 +15,7 @@ public class Grid {
     private int height;
     private int width;
     private int won;
+    private boolean gameOver;
     private int[][] gridCoords = new int[9][4];
     private int[][] gridContents = new int[3][3];
 
@@ -32,7 +33,7 @@ public class Grid {
 
     private Bitmap crossBallImg;
     private Bitmap dotBallImg;
-    private final Ball ball;
+    private Ball ball;
 
 
     public Grid(int height, int width, Bitmap crossBallImg, Bitmap dotBallImg, Ball ball) {
@@ -57,6 +58,7 @@ public class Grid {
         if (won == dotBall) {
             ball.remove();
             ball.setInHole(true);
+            gameOver=true;
             Log.d(TAG, "player won");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -66,6 +68,7 @@ public class Grid {
         } else if (won == crossBall) {
             ball.remove();
             ball.setInHole(true);
+            gameOver=true;
             Log.d(TAG, "player lost");
             gridPaint.setStyle(Paint.Style.FILL);
             gridPaint.setTextSize(200);
@@ -75,6 +78,7 @@ public class Grid {
 //        else if (isDraw()) {
 //            ball.remove();
 //            ball.setInHole(true);
+//        gameOver=true;
 //            Log.d(TAG, "Game Draw");
 //            gridPaint.setStyle(Paint.Style.FILL);
 //            gridPaint.setTextSize(200);
@@ -163,7 +167,7 @@ public class Grid {
 
     public void detectBall() {
         for (int gridNum = 0; gridNum < 9; gridNum++) {
-            if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum))) {
+            if (ball.goInHole(calCentreX(gridNum), calCentreY(gridNum)) && !gameOver) {
                 if (gridNum == 0) {
                     gridContents[0][0] = dotBall;
                     hasWon(0, 0, dotBall);
@@ -197,29 +201,30 @@ public class Grid {
     }
 
     public void opponentBallDetect() {
-        boolean haveEmpty = false;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
-                if (gridContents[i][j] == empty) {
-                    haveEmpty = true;
-                    break;
-                }
-        }
-        if (haveEmpty) {
-            while (this.ball.isInHole()) {
-                int row = this.ball.getOpponentChoice();
-                int col = this.ball.getOpponentChoice();
-                if (gridContents[row][col] == empty) {
-                    gridContents[row][col] = 2;
+        if(!gameOver){
+            boolean haveEmpty = false;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++)
+                    if (gridContents[i][j] == empty) {
+                        haveEmpty = true;
+                        break;
+                    }
+            }
+            if (haveEmpty) {
+                while (this.ball.isInHole()) {
+                    int row = this.ball.getOpponentChoice();
+                    int col = this.ball.getOpponentChoice();
+                    if (gridContents[row][col] == empty) {
+                        gridContents[row][col] = 2;
 
-                    this.ball.setX(539);
-                    this.ball.setY(820);
-                    this.ball.setInHole(false);
-                    hasWon(row, col, crossBall);
+                        this.ball.setX(539);
+                        this.ball.setY(820);
+                        this.ball.setInHole(false);
+                        hasWon(row, col, crossBall);
+                    }
                 }
             }
         }
-
     }
 
     public void hasWon(int currentRow, int currentCol, int ballType) {
